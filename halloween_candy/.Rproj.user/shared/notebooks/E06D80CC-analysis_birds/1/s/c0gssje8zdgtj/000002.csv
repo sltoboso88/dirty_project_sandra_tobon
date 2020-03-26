@@ -1,0 +1,16 @@
+"0","```r
+#Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3, 	DIOANTEXU PL3, 856
+birds_ship_data %>%
+  group_by(species_scientific_name, species_common_name, species_abbreviation) %>%
+  filter(count == 1) %>%
+  summarise(number_sightings = n()) %>%
+  arrange(desc(number_sightings)) %>%
+  head(1)
+#Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3, 	DIOANTEXU PL3, 765
+birds_ship_data %>%
+  group_by(species_scientific_name, species_common_name, species_abbreviation) %>%
+  filter(count == 1, accompanying_ocurrence == \"N\") %>%
+  summarise(number_sightings = n()) %>%
+  arrange(desc(number_sightings)) %>%
+  head(1)
+```"

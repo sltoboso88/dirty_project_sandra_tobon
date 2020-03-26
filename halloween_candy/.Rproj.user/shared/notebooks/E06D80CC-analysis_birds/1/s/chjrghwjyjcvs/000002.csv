@@ -1,0 +1,11 @@
+"0","```r
+bird_view_one %>%
+  anti_join(bird_view_more, by = c(\"species_scientific_name\",
+   \"species_common_name\", \"species_abbreviation\")) %>%
+  group_by(species_scientific_name, species_common_name, species_abbreviation) %>%
+  summarise(real_species = n_distinct(species_common_name)) %>% 
+  nrow()
+
+```"
+"1","[1] 102
+"

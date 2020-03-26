@@ -1,0 +1,7 @@
+"0","```r
+pattern = \"[Pp]enguin\"
+birds_ship_data %>%
+  filter(str_detect(species_common_name, pattern)) %>%
+  summarise(total_penguin = sum(count))
+  
+```"

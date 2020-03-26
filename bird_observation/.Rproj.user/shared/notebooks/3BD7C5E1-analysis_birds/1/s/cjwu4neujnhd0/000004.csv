@@ -1,0 +1,4 @@
+"0","birds_ship_data <- read_excel(here(""clean_data/sea_birds.xlsx""))
+"
+"2","Error: `path` does not exist: ‘/Users/SandraTobon/codeclan_work/week_04/dirty_project_sandra_tobon/bird_observation/clean_data/sea_birds.xlsx’
+"

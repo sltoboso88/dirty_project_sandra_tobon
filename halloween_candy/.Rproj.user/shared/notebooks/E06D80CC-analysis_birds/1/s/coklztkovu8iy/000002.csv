@@ -1,0 +1,8 @@
+"0","```r
+#Puffinus tenuirostris	Short-tailed shearwater	PUFTEN	469320
+birds_ship_data %>%
+  group_by(species_scientific_name, species_common_name, species_abbreviation) %>%
+  summarise(number_total_sightings = sum(count)) %>%
+  arrange(desc(number_total_sightings)) %>%
+  head(1)
+```"
