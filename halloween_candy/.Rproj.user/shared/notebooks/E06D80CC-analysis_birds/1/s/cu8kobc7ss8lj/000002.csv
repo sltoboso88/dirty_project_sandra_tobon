@@ -1,9 +1,0 @@
-"0","```r
-#Puffinus pacificus	Wedge-tailed shearwater PUFPAC	855
-birds_ship_data %>%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %>%
-  filter(lat > -30) %>% 
-  summarise(number_total_sightings_30 = sum(count)) %>%
-  arrange(desc(number_total_sightings_30))
-  
-```"

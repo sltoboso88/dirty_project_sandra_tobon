@@ -1757,74 +1757,48 @@ summary {
 <p>load data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmlyZHNfc2hpcF9kYXRhIDwtIHJlYWRfZXhjZWwoaGVyZShcImNsZWFuX2RhdGEvc2VhX2JpcmRzLnhsc3hcIikpXG5cbmBgYCJ9 -->
-<pre class="r"><code>birds_ship_data &lt;- read_excel(here(&quot;clean_data/sea_birds.xlsx&quot;))
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmlyZHNfc2hpcF9kYXRhIDwtIHJlYWRfZXhjZWwoaGVyZShcImNsZWFuX2RhdGEvc2hpcF9iaXJkcy54bHN4XCIpKVxuXG5gYGAifQ== -->
+<pre class="r"><code>birds_ship_data &lt;- read_excel(here(&quot;clean_data/ship_birds.xlsx&quot;))
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IGBwYXRoYCBkb2VzIG5vdCBleGlzdDog4oCYL1VzZXJzL1NhbmRyYVRvYm9uL2NvZGVjbGFuX3dvcmsvd2Vla18wNC9kaXJ0eV9wcm9qZWN0X3NhbmRyYV90b2Jvbi9iaXJkX29ic2VydmF0aW9uL2NsZWFuX2RhdGEvc2VhX2JpcmRzLnhsc3jigJlcbiJ9 -->
-<pre><code>Error: `path` does not exist: ‘/Users/SandraTobon/codeclan_work/week_04/dirty_project_sandra_tobon/bird_observation/clean_data/sea_birds.xlsx’</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IGBwYXRoYCBkb2VzIG5vdCBleGlzdDog4oCYL1VzZXJzL1NhbmRyYVRvYm9uL2NvZGVjbGFuX3dvcmsvd2Vla18wNC9kaXJ0eV9wcm9qZWN0X3NsdG9ib3NvL2hhbGxvd2Vlbl9jYW5keS9jbGVhbl9kYXRhL3NoaXBfYmlyZHMueGxzeOKAmVxuIn0= -->
+<pre><code>Error: `path` does not exist: ‘/Users/SandraTobon/codeclan_work/week_04/dirty_project_sltoboso/halloween_candy/clean_data/ship_birds.xlsx’</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>most individual sightings</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0Rpb21lZGVhIGFudGlwb2RlbnNpcyAvIGV4dWxhbnMgUEwzLCBXYW5kZXJpbmcgYWxiYXRyb3NzIHNlbnN1IGxhdG8gUEwzLCBcdERJT0FOVEVYVSBQTDMsIDg1NlxuYmlyZHNfc2hpcF9kYXRhICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBmaWx0ZXIoY291bnQgPT0gMSkgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfc2lnaHRpbmdzID0gbigpKSAlPiVcbiAgYXJyYW5nZShkZXNjKG51bWJlcl9zaWdodGluZ3MpKSAlPiVcbiAgaGVhZCgxKVxuI0Rpb21lZGVhIGFudGlwb2RlbnNpcyAvIGV4dWxhbnMgUEwzLCBXYW5kZXJpbmcgYWxiYXRyb3NzIHNlbnN1IGxhdG8gUEwzLCBcdERJT0FOVEVYVSBQTDMsIDc2NVxuYmlyZHNfc2hpcF9kYXRhICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBmaWx0ZXIoY291bnQgPT0gMSwgYWNjb21wYW55aW5nX29jdXJyZW5jZSA9PSBcIk5cIikgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfc2lnaHRpbmdzID0gbigpKSAlPiVcbiAgYXJyYW5nZShkZXNjKG51bWJlcl9zaWdodGluZ3MpKSAlPiVcbiAgaGVhZCgxKVxuYGBgIn0= -->
-<pre class="r"><code>#Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3,   DIOANTEXU PL3, 856
-birds_ship_data %&gt;%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;%
-  filter(count == 1) %&gt;%
-  summarise(number_sightings = n()) %&gt;%
-  arrange(desc(number_sightings)) %&gt;%
-  head(1)
-#Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3,   DIOANTEXU PL3, 765
-birds_ship_data %&gt;%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;%
-  filter(count == 1, accompanying_ocurrence == &quot;N&quot;) %&gt;%
-  summarise(number_sightings = n()) %&gt;%
-  arrange(desc(number_sightings)) %&gt;%
-  head(1)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuI0Rpb21lZGVhIGFudGlwb2RlbnNpcyAvIGV4dWxhbnMgUEwzLCBXYW5kZXJpbmcgYWxiYXRyb3NzIHNlbnN1IGxhdG8gUEwzLCBcdERJT0FOVEVYVSBQTDMsIDg1NlxuYmlyZHNfc2hpcF9kYXRhICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBmaWx0ZXIoY291bnQgPT0gMSkgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfc2lnaHRpbmdzID0gbigpKSAlPiVcbiAgYXJyYW5nZShkZXNjKG51bWJlcl9zaWdodGluZ3MpKSAlPiVcbiAgaGVhZCgxKVxuI0Rpb21lZGVhIGFudGlwb2RlbnNpcyAvIGV4dWxhbnMgUEwzLCBXYW5kZXJpbmcgYWxiYXRyb3NzIHNlbnN1IGxhdG8gUEwzLCBcdERJT0FOVEVYVSBQTDMsIDc2NVxuYmlyZHNfc2hpcF9kYXRhICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBmaWx0ZXIoY291bnQgPT0gMSwgYWNjb21wYW55aW5nX29jdXJyZW5jZSA9PSBcXE5cXCkgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfc2lnaHRpbmdzID0gbigpKSAlPiVcbiAgYXJyYW5nZShkZXNjKG51bWJlcl9zaWdodGluZ3MpKSAlPiVcbiAgaGVhZCgxKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r #Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3, DIOANTEXU PL3, 856 birds_ship_data %&gt;% group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;% filter(count == 1) %&gt;% summarise(number_sightings = n()) %&gt;% arrange(desc(number_sightings)) %&gt;% head(1) #Diomedea antipodensis / exulans PL3, Wandering albatross sensu lato PL3, DIOANTEXU PL3, 765 birds_ship_data %&gt;% group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;% filter(count == 1, accompanying_ocurrence == ) %&gt;% summarise(number_sightings = n()) %&gt;% arrange(desc(number_sightings)) %&gt;% head(1)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>bird had the highest total count?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1B1ZmZpbnVzIHRlbnVpcm9zdHJpc1x0U2hvcnQtdGFpbGVkIHNoZWFyd2F0ZXJcdFBVRlRFTlx0NDY5MzIwXG5iaXJkc19zaGlwX2RhdGEgJT4lXG4gIGdyb3VwX2J5KHNwZWNpZXNfc2NpZW50aWZpY19uYW1lLCBzcGVjaWVzX2NvbW1vbl9uYW1lLCBzcGVjaWVzX2FiYnJldmlhdGlvbikgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfdG90YWxfc2lnaHRpbmdzID0gc3VtKGNvdW50KSkgJT4lXG4gIGFycmFuZ2UoZGVzYyhudW1iZXJfdG90YWxfc2lnaHRpbmdzKSkgJT4lXG4gIGhlYWQoMSlcbmBgYCJ9 -->
-<pre class="r"><code>#Puffinus tenuirostris  Short-tailed shearwater PUFTEN  469320
-birds_ship_data %&gt;%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;%
-  summarise(number_total_sightings = sum(count)) %&gt;%
-  arrange(desc(number_total_sightings)) %&gt;%
-  head(1)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuI1B1ZmZpbnVzIHRlbnVpcm9zdHJpc1x0U2hvcnQtdGFpbGVkIHNoZWFyd2F0ZXJcdFBVRlRFTlx0NDY5MzIwXG5iaXJkc19zaGlwX2RhdGEgJT4lXG4gIGdyb3VwX2J5KHNwZWNpZXNfc2NpZW50aWZpY19uYW1lLCBzcGVjaWVzX2NvbW1vbl9uYW1lLCBzcGVjaWVzX2FiYnJldmlhdGlvbikgJT4lXG4gIHN1bW1hcmlzZShudW1iZXJfdG90YWxfc2lnaHRpbmdzID0gc3VtKGNvdW50KSkgJT4lXG4gIGFycmFuZ2UoZGVzYyhudW1iZXJfdG90YWxfc2lnaHRpbmdzKSkgJT4lXG4gIGhlYWQoMSlcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r #Puffinus tenuirostris Short-tailed shearwater PUFTEN 469320 birds_ship_data %&gt;% group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;% summarise(number_total_sightings = sum(count)) %&gt;% arrange(desc(number_total_sightings)) %&gt;% head(1)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>birds highest total count in latitud -30</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1B1ZmZpbnVzIHBhY2lmaWN1c1x0V2VkZ2UtdGFpbGVkIHNoZWFyd2F0ZXIgUFVGUEFDXHQ4NTVcbmJpcmRzX3NoaXBfZGF0YSAlPiVcbiAgZ3JvdXBfYnkoc3BlY2llc19zY2llbnRpZmljX25hbWUsIHNwZWNpZXNfY29tbW9uX25hbWUsIHNwZWNpZXNfYWJicmV2aWF0aW9uKSAlPiVcbiAgZmlsdGVyKGxhdCA+IC0zMCkgJT4lIFxuICBzdW1tYXJpc2UobnVtYmVyX3RvdGFsX3NpZ2h0aW5nc18zMCA9IHN1bShjb3VudCkpICU+JVxuICBhcnJhbmdlKGRlc2MobnVtYmVyX3RvdGFsX3NpZ2h0aW5nc18zMCkpXG4gIFxuYGBgIn0= -->
-<pre class="r"><code>#Puffinus pacificus Wedge-tailed shearwater PUFPAC  855
-birds_ship_data %&gt;%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;%
-  filter(lat &gt; -30) %&gt;% 
-  summarise(number_total_sightings_30 = sum(count)) %&gt;%
-  arrange(desc(number_total_sightings_30))
-  </code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuI1B1ZmZpbnVzIHBhY2lmaWN1c1x0V2VkZ2UtdGFpbGVkIHNoZWFyd2F0ZXIgUFVGUEFDXHQ4NTVcbmJpcmRzX3NoaXBfZGF0YSAlPiVcbiAgZ3JvdXBfYnkoc3BlY2llc19zY2llbnRpZmljX25hbWUsIHNwZWNpZXNfY29tbW9uX25hbWUsIHNwZWNpZXNfYWJicmV2aWF0aW9uKSAlPiVcbiAgZmlsdGVyKGxhdCA+IC0zMCkgJT4lIFxuICBzdW1tYXJpc2UobnVtYmVyX3RvdGFsX3NpZ2h0aW5nc18zMCA9IHN1bShjb3VudCkpICU+JVxuICBhcnJhbmdlKGRlc2MobnVtYmVyX3RvdGFsX3NpZ2h0aW5nc18zMCkpXG4gIFxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r #Puffinus pacificus Wedge-tailed shearwater PUFPAC 855 birds_ship_data %&gt;% group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;% filter(lat &gt; -30) %&gt;% summarise(number_total_sightings_30 = sum(count)) %&gt;% arrange(desc(number_total_sightings_30))</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>How many different types of birds were only ever seen in groups of 1</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmlyZF92aWV3X29uZSAlPiVcbiAgYW50aV9qb2luKGJpcmRfdmlld19tb3JlLCBieSA9IGMoXCJzcGVjaWVzX3NjaWVudGlmaWNfbmFtZVwiLFxuICAgXCJzcGVjaWVzX2NvbW1vbl9uYW1lXCIsIFwic3BlY2llc19hYmJyZXZpYXRpb25cIikpICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBzdW1tYXJpc2UocmVhbF9zcGVjaWVzID0gbl9kaXN0aW5jdChzcGVjaWVzX2NvbW1vbl9uYW1lKSkgJT4lIFxuICBucm93KClcblxuYGBgIn0= -->
-<pre class="r"><code>bird_view_one %&gt;%
-  anti_join(bird_view_more, by = c(&quot;species_scientific_name&quot;,
-   &quot;species_common_name&quot;, &quot;species_abbreviation&quot;)) %&gt;%
-  group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;%
-  summarise(real_species = n_distinct(species_common_name)) %&gt;% 
-  nrow()
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYmlyZF92aWV3X29uZSAlPiVcbiAgYW50aV9qb2luKGJpcmRfdmlld19tb3JlLCBieSA9IGMoXFxzcGVjaWVzX3NjaWVudGlmaWNfbmFtZVxcLFxuICAgXFxzcGVjaWVzX2NvbW1vbl9uYW1lXFwsIFxcc3BlY2llc19hYmJyZXZpYXRpb25cXCkpICU+JVxuICBncm91cF9ieShzcGVjaWVzX3NjaWVudGlmaWNfbmFtZSwgc3BlY2llc19jb21tb25fbmFtZSwgc3BlY2llc19hYmJyZXZpYXRpb24pICU+JVxuICBzdW1tYXJpc2UocmVhbF9zcGVjaWVzID0gbl9kaXN0aW5jdChzcGVjaWVzX2NvbW1vbl9uYW1lKSkgJT4lIFxuICBucm93KClcblxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r bird_view_one %&gt;% anti_join(bird_view_more, by = c(_scientific_name, _common_name, _abbreviation)) %&gt;% group_by(species_scientific_name, species_common_name, species_abbreviation) %&gt;% summarise(real_species = n_distinct(species_common_name)) %&gt;% nrow()</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwMlxuIn0= -->
 <pre><code>[1] 102</code></pre>
@@ -1834,12 +1808,10 @@ birds_ship_data %&gt;%
 <p>penquin 93</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGF0dGVybiA9IFwiW1BwXWVuZ3VpblwiXG5iaXJkc19zaGlwX2RhdGEgJT4lXG4gIGZpbHRlcihzdHJfZGV0ZWN0KHNwZWNpZXNfY29tbW9uX25hbWUsIHBhdHRlcm4pKSAlPiVcbiAgc3VtbWFyaXNlKHRvdGFsX3Blbmd1aW4gPSBzdW0oY291bnQpKVxuICBcbmBgYCJ9 -->
-<pre class="r"><code>pattern = &quot;[Pp]enguin&quot;
-birds_ship_data %&gt;%
-  filter(str_detect(species_common_name, pattern)) %&gt;%
-  summarise(total_penguin = sum(count))
-  </code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGF0dGVybiA9IFxcW1BwXWVuZ3VpblxcXG5iaXJkc19zaGlwX2RhdGEgJT4lXG4gIGZpbHRlcihzdHJfZGV0ZWN0KHNwZWNpZXNfY29tbW9uX25hbWUsIHBhdHRlcm4pKSAlPiVcbiAgc3VtbWFyaXNlKHRvdGFsX3Blbmd1aW4gPSBzdW0oY291bnQpKVxuICBcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r pattern = [Pp]enguin<br />
+birds_ship_data %&gt;% filter(str_detect(species_common_name, pattern)) %&gt;% summarise(total_penguin = sum(count))</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->

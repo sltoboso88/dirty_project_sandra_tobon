@@ -288,6 +288,9 @@ halloween_candy_2017 <- halloween_candy_2017 %>%
 
 halloween_candy_2017 <- halloween_candy_2017[,c(7, 1, 2, 3, 4, 5, 6)]
 
+halloween_candy_2017 <- halloween_candy_2017 %>%
+  drop_na()
+
 write_csv(halloween_candy_2017, here("clean_data/halloween_candy_2017.csv"))
 
 
@@ -303,6 +306,16 @@ halloween_candy <- halloween_candy %>%
 
 halloween_candy <- halloween_candy %>%
   union(halloween_candy_2017)
+
+halloween_candy <- halloween_candy %>%
+  filter(!c(candies_food == "Cash, or other forms of legal tender" |
+            candies_food == "Dental paraphenalia" |
+            candies_food == "Creepy Religious comics/Chick Tracts" |
+            candies_food == "Hugs (actual physical hugs)" |
+            candies_food == "Bonkers (the board game)" |
+            candies_food ==
+             "Person of Interest Season 3 DVD Box Set (not including Disc 4 with hilarious outtakes"
+           ))
 
 write_csv(halloween_candy, here("clean_data/halloween_candy.csv"))
 
