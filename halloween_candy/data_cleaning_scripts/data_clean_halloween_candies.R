@@ -5,9 +5,6 @@ library(janitor)
 library(readxl)
 library(here)
 library(readr)
-
-
-
 #Load data ----
 halloween_candy_2015 <- read_excel(here("raw_data/boing-boing-candy-2015.xlsx"))
 

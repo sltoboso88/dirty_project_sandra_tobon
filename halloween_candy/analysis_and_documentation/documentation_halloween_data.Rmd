@@ -1,22 +1,57 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Analysis Halloween Data"
+author: "Sandra Tobon"
+date: "27/03/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
 ---
-Libraries
-```{r echo=FALSE}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
 library(tidyverse)
 library(readr)
 library(here)
 library(styler)
 ```
 
-Load Data
-```{r echo=FALSE}
+# HALLOWEEN DATA  
+<center>
+![](http://justfunfacts.com/wp-content/uploads/2018/01/candies.jpg)
+</center>
+## What is the dataset about?
+
+Every year around the world but mainly in USA and Canada, is a poll that ask people about how if they **Join**, **Despair** or **Meh**, some general candies; the grade of conecction that they have with specifics famous person; some question about cultural and publicity things, and some personal questions.  
+
+For this exercise is only neccesary the information about the candies. 
+
+## Data clean proccess  
+
+* Clean the age column  
+* Clean the country column, for this is very helpfull the states column. (2016 - 2017)  
+* Select the columns for the analysis  
+* Pivot longer (candies and the preferences)  
+* Add a year column in each data set.  
+* Add some columns that 2015 data set didn't have. 
+* Unit the 3 data sets and filter some information without relation to a real candy
+
+## Solutions to the questions  
+
+```{r include=FALSE}
 halloween_candies <- read_csv(here("clean_data/halloween_candy.csv"))
 ```
 
-Total number of candy ratings given across the three years = 118533 and 126 candies were in the study. 
-```{r echo=TRUE}
+1. Total number of candy ratings given across the three years  
+
+```{r}
 halloween_candies %>%
   group_by(candies_food) %>%
   summarise(n_candies_ratings = n()) %>%
@@ -28,18 +63,19 @@ halloween_candies %>%
     summarise(total_candies_analysis = sum(n_candies))
 ```
 
-Average age of people who are going out trick or treating themsel or not = 42 years  people that going out trick or treating themsel and 37 years that not going out trick or treating themsel.
-```{r echo=TRUE}
+2. Average age of people who are going out trick or treating themsel or not = 42 years  people that going out trick or treating themsel  
+
+```{r}
 halloween_candies %>%
   select(trick_themself, age) %>%
   filter(!is.na(trick_themself)) %>%
   group_by(trick_themself) %>%
   summarise(average_age = round(mean(age),0))
-  
 ```
 
-Candy bar revived the most of joy, despair and meh = Any full size candy bar Joy 790, Broken glow stick Despair 795, Lollipops Meh 490
-```{r echo=TRUE}
+3. Candy bar revived the most of joy, despair and meh  
+
+```{r}
 halloween_candies %>%
   filter(!is.na(preference_candies)) %>%
   group_by(candies_food, preference_candies) %>%
@@ -47,11 +83,11 @@ halloween_candies %>%
   group_by(preference_candies) %>%
   filter(candies_food != "Any full-sized candy bar") %>%
   top_n(1)
-
 ```
 
-People rated Starburst as despair = 351 persons
-```{r echo=TRUE}
+4. People rated Starburst as despair  
+
+```{r}
 halloween_candies %>%
   filter(!is.na(preference_candies)) %>%
   filter(candies_food == "Starburst") %>%
@@ -60,7 +96,6 @@ halloween_candies %>%
   filter(preference_candies == "DESPAIR")
 ```
 
-Despair as -1, joy as +1 and meh as 0.
 ```{r echo=FALSE}
 halloween_candies <- halloween_candies %>%
   mutate(puntuation = recode(preference_candies, 
@@ -69,38 +104,31 @@ halloween_candies <- halloween_candies %>%
                              MEH = 0))
 ```
 
-Most popular candy bar by this rating system for each gender in the dataset =
-Any full sized candy bar for everyone. When I take this out the result is: 
-KitKat and Lindt Truffle for Women
-KitKat for Male
-Twix for other
-KitKat for people that prefer don't say the gender
-```{r echo=TRUE}
+5. Most popular candy bar by this rating system for each gender in the dataset  
+
+```{r}
 halloween_candies %>%
   filter(!c(gender == "Not ask" | is.na(preference_candies))) %>%
   group_by(gender, candies_food) %>%
   summarise(total_prefence = sum(puntuation)) %>%
   filter(candies_food != "Any full-sized candy bar") %>%
   top_n(1)
-
 ```
 
-Most popular candy bar by this rating system for each year in the dataset =
-It is Any full-sized candy bar, in each year. If I take out Any full-sized candy bar, the result is =
-Kit kat is the favorite every year
+6. Most popular candy bar by this rating system for each year in the dataset =
+It is Any full-sized candy bar, in each year.
+
 ```{r}
 halloween_candies %>%
   filter(!is.na(preference_candies)) %>%
   group_by(year, candies_food) %>%
   summarise(total_prefence = sum(puntuation)) %>%
   filter(candies_food != "Any full-sized candy bar") %>%
-  arrange(desc(total_prefence))
+  arrange(desc(total_prefence)) %>%
   top_n(1)
-
 ```
 
-Most popular candy bar by this rating system for each country in the dataset =
-
+7. Most popular candy bar by this rating system for each country in the dataset 
 ```{r}
 halloween_candies %>%
   filter(!c(year == 2015 | is.na(preference_candies))) %>%
@@ -110,4 +138,3 @@ halloween_candies %>%
   arrange(desc(total_prefence)) %>%
   top_n(1)
 ```
-
