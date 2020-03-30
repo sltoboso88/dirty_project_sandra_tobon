@@ -1,0 +1,53 @@
+CLEANING PROCESS FOR THE  DATA-SET RIGHT-WING AUTHORITARIANISM SCALE IN 2015
+
+The dimensions of the dataset before cleaning are:
+  9881 90
+
+The names of the columns in the dataset aren't following the snake_case so we
+we have change it, to that format.
+
+The columns q1 and q2 are warm questions so we have delete them for the average
+of the test as e1 and e2, they are the time that the people needed for answering
+that questions.
+
+All the time must to be in seconds because the total time that you have for
+answering the test is max 3 - 5 minutes
+
+Some times are negative, it is time so negative values aren't logical, so we
+have deleted them
+
+We have sum the values that the people spend answering the questions of rwas and
+we have put the sum in a new variable call time_a_rwas, after we deleted the
+columns e. Also we have sum the columns with all the time that the people spend
+during all the process between the introduction to the answer of the general
+questions and we put this in a variable call total_time_s, after we have deleted
+the introelapse, testelapse, surveyelapse columns. All of this is because we have
+all the information of this columns summarice in the new 2 columns.
+
+For the columns time_a_rwas we divide the value for 1000 because the time that
+were there were in milliseconds.
+
+For answering the questions we don't need the answers about Personality
+Inventory and definitions that you know, so we deleted them.
+
+The score is reverse for some questions in RWAS so we had to recode them with
+the normal values.
+
+The columns age had values over 100 years old, so we have remove them.
+
+The column country isn't neccesary for answering the questions, but can be very
+interesting to analyce it so we have keep it, but it has some NA values so it is
+important don't drop na values now, only at the moment that we will work with it.
+
+The questions for RWAS were pivot longer so the number of question is in a column
+call number_question and the score for each question are in a column call score.
+There we did the conversion for the columns 4, 6, 8, 9, 11, 13, 15, 18, 20, 21,
+because they score were reverse in them.
+
+For solving the question about the familysize for each style of childhood we
+have taken the columns urban that describe the place when the people live when
+they were child and then we took the familysize column for determine the
+familysize average. We have take the familysize of 36, 69 and 100 as outliers,
+so we will not use them for the average calculation. Note even if we take the
+outliers the average continue to be the same because it is a lot data so the
+outliers don't interfere  with the result

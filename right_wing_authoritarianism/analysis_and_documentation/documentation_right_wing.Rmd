@@ -1,0 +1,196 @@
+---
+title: "Documentation Right Wing Data"
+author: "Sandra Tobon"
+date: "30/03/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(tidyverse)
+library(readr)
+library(here)
+```
+
+```{r include=FALSE}
+right_wing <- read_csv(here("clean_data/right_wing_clean.csv"))
+```
+
+ 
+ <center>
+# Right Wing Data  
+ 
+![](https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Hitlermusso2_edit.jpg/557px-Hitlermusso2_edit.jpg)
+ </center>
+ 
+## History about the data  
+
+After the Second War World, the psychologists designed few tests for trying to undestand the impact and the mind of the followers of the fascist regimes. The Right-wing Authoritarianism Scale is one of this test, it was designed in 1981 for Bob Altemeyer.  
+
+The information that we find in the data base were supplied voluntarily by people over 12 years old in the 2015 for research purpose.  
+
+In this Data Base we have other 2 tests:  
+
+   *  Ten Item Personality Inventory 
+   *  Check words that you know  
+
+## Cleaning process 
+
+* Change the column names  
+* Delete columns q1 and q2 because they are warming questions.  
+* Delete information about the other two test,  religion, orientation, race, voted, married, major and dimensions of the screen.   
+* Add together the columns e3 to e22, because they have the time that each person need for answering questions q3 to q22. The time in those columns are in milliseconds. This addition is in a column call time_a_rwas.    
+* Add together the elapses columns, so we can have the total time that the people spend during the survey. The time is in seconds and the addition is in a collum call total_time_s.  
+* Pivot Longer the rwas questions, in a column call number_question and the score of the questions in a column call score.
+* Recode the RWAS questions  4, 6, 8, 9, 11, 13, 15, 18, 20, 21, because the score in them were reverse. 
+* Analice some outliers and decide what to do with them:  
+  * Negative values in time
+  * Age over 100 years old  
+  
+## Answer the Questions  
+
+  1. Average RWA score for each gender  
+  Note: When the information in gender is 0 is because the user didn't entry information, so we should filter it. 
+```{r}
+right_wing %>%
+  mutate_at("gender", as.character) %>%
+  mutate(gender = recode(gender,
+                            '0' = "no entry",
+                            '1' = "male",
+                            '2' = "female",
+                            '3' = "other")) %>%
+  group_by(gender) %>%
+  summarise(average_score_per_gender = round(mean(score),2)) %>%
+  filter(gender != "no entry")
+```
+
+2.  Average RWA score for left handed people vs. right handed people.  
+Note: When the information in hand is 0 is because the user didn't entry it and whe is 3 is because the person can write with both hands, so we should filter them.  
+```{r}
+right_wing %>%
+  mutate_at("hand", as.character) %>%
+  mutate(hand = recode(hand,
+                       '0' = "no entry",
+                       '1' = "right",
+                       '2' = "left",
+                       '3' = "both")) %>%
+  group_by(hand) %>%
+  summarise(average_score_per_hand = round(mean(score),2)) %>%
+  filter(!c(hand == "no entry" | hand == "both"))
+```
+
+3. Average family size for each type of childhood  
+Note: the only columns that have relation with the childhood live is urban. We have filter the users that didn't answer the question and we have only keeped family size under or equal to 13 members. But even with the few outliers the result is the same, because we have a lot data so the outliers don't affect the result. 
+```{r}
+right_wing %>%
+  filter(familysize <= 13)  %>%
+  mutate_at("urban", as.character) %>%
+  mutate(urban = recode(urban,
+                        '0' = "no entry",
+                        '1' = "rural",
+                        '2' = "suburban",
+                        '3' = "urban")) %>%
+  group_by(urban) %>%
+  summarise(average_familysize_chilhood = round(mean(familysize),0)) %>%
+  filter(urban != "no entry")
+```
+
+ 4. Average time to take the test for each education leve.  
+ Note: We have taken the two columns that have the total time. One is time_a_rwas that have the total time that the people took for answering RWAS questions. The other one is the total_time_s that have the total time that the people spend answering  the introduction, RWAS questions and the other questions.  
+```{r}
+right_wing %>%
+  mutate_at("education", as.character) %>%
+  mutate(education = recode(education,
+                            '0' = "no entry",
+                            '1' = "less than high school", 
+                            '2' = "high school", 
+                            '3' = "university degree", 
+                            '4' = "graduate degree")) %>%
+  group_by(education) %>%
+  summarise(average_time_rwas = round(mean(time_a_rwas),0)) %>%
+  filter(education != "no entry")
+
+right_wing %>%
+  mutate_at("education", as.character) %>%
+  mutate(education = recode(education,
+                            '0' = "no entry",
+                            '1' = "less than high school", 
+                            '2' = "high school", 
+                            '3' = "university degree", 
+                            '4' = "graduate degree")) %>%
+  group_by(education) %>%
+  summarise(average_time_total_s = round(mean(total_time_s),0)) %>%
+  filter(education != "no entry")
+```
+ 
+  5. Plot average time to take the test for each education level
+```{r include=FALSE}
+average_time_rwas_education_level <- right_wing %>%
+  mutate_at("education", as.character) %>%
+  mutate(education = recode(education,
+                            '0' = "no entry",
+                            '1' = "less than high school", 
+                            '2' = "high school", 
+                            '3' = "university degree", 
+                            '4' = "graduate degree")) %>%
+  group_by(education) %>%
+  summarise(average_time_rwas = round(mean(time_a_rwas),0)) %>%
+  filter(education != "no entry")
+
+average_time_a_education_level <- right_wing %>%
+  mutate_at("education", as.character) %>%
+  mutate(education = recode(education,
+                            '0' = "no entry",
+                            '1' = "less than high school", 
+                            '2' = "high school", 
+                            '3' = "university degree", 
+                            '4' = "graduate degree")) %>%
+  group_by(education) %>%
+  summarise(average_time_total_s = round(mean(total_time_s),0)) %>%
+  filter(education != "no entry")
+```
+
+```{r}
+ggplot(data = average_time_rwas_education_level, 
+       mapping = aes(x = education,  y = average_time_rwas)) +
+  geom_histogram(stat = "identity")
+
+ggplot(data = average_time_a_education_level, 
+       mapping = aes(x = education,  y = average_time_total_s)) +
+  geom_histogram(stat = "identity")
+```
+
+  6. Average RWA score for people aged
+    * Under 18  
+    * 18 to 25  
+    * 26 to 40  
+    * 41 to 60  
+    * Over 60  
+    
+```{r}
+interval_age <- c(18, 26, 41, 61)
+
+right_wing %>%
+  arrange(age) %>%
+  mutate(group_age = findInterval(age, interval_age))  %>%
+  mutate_at("group_age", as.character) %>%
+  mutate(group_age = recode(group_age,
+                        '0' = "under 18",
+                        '1' = "18 - 25",
+                        '2' = "26 - 40",
+                        '3' = "41 - 60",
+                        '4' = "over 60")) %>%
+  group_by(group_age) %>%
+  summarise(average_rwas_age = round(mean(score),2))
+```
+
