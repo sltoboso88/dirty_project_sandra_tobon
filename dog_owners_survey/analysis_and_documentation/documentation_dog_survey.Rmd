@@ -1,0 +1,108 @@
+---
+title: "Documentation Dog Owners Survey"
+author: "Sandra Tobon"
+date: "31/03/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(tidyverse)
+library(here)
+library(readr)
+```
+
+```{r include=FALSE}
+dog_survey <- read_csv(here("clean_data/dog_survey_clean.csv"))
+```
+
+<center>
+# Dog Owners Survey 
+
+
+![](https://static.boredpanda.com/blog/wp-content/uploads/2018/09/Bored-Panda_Page_7-5b8cfbd671419-5b8e6f8e3a2ec__880.jpg)
+</center>  
+
+
+## Explanation of the Data Set  
+
+This is a "free-hand " survey filled by dog owners. In this survey the owners of the dog answer:  
+
+  * tittle, first_name, last_name, email  
+  * amount_spent_on_dog_food, dog_size, dog_gender, dog_age  
+
+## Clean Data Process 
+
+The raw_data have a dimensions of 308 rows and 11 columns.  
+
+  * Only one column had the name different to snake style (Title)  
+  * Three rows were duplicates, two one time and one six times, so we have deleted the duplicates  
+  * Two rows had information about more that one dog, so we have add some rows with the information of each dog, in this way we have one row per dog  
+  * We standardize the columns dog_gender, dog_size  
+  * We standardize the columns dog_age and amount_spent_on_dog_food, also we transform them to numeric and convert to positive 
+  * We didn't delete NA values, because most of the time the  others columns have valid values that we can use in the analysis
+  
+## Answer the questions  
+
+  1. The client only counts a valid email address as one ending in ‘.com’. How many survey results have a valid email address  
+  
+```{r}
+dog_survey %>%
+  mutate(is_email = str_ends(email, "\\.com")) %>%
+  summarise(total_valid_email = sum(is_email))
+```
+  
+  2. The average amount spent on dog food for each dog size  
+  
+```{r}
+dog_survey %>%
+  filter(!c(dog_size == "No entry" | is.na(amount_spent_on_dog_food))) %>%
+  group_by(dog_size) %>%
+  summarise(amount_spent_on_dog_food_per_size = round(mean(amount_spent_on_dog_food),2)) %>%
+  arrange(desc(amount_spent_on_dog_food_per_size))
+```
+  
+  
+  3. The average age of their dog for owners whose surname starts with a letter in the second half of the alphabet (N onwards)
+  
+```{r}
+pattern <- "[N-Z]"
+dog_survey %>%
+  mutate(is_n_to_z = str_starts(last_name, pattern)) %>%
+  filter(is_n_to_z == TRUE) %>%
+  summarise(average_dog_age_n_to_z = round(mean(dog_age),0))
+```
+
+  4. The dog_age column is the age in dog years. If the conversion is 1 human year = 6 dog years, then what is the average human age for dogs of each gender?
+  
+```{r}
+dog_survey %>%
+  filter(dog_gender != "No entry") %>%
+  mutate(human_age_dog = dog_age/6) %>%
+  group_by(dog_gender) %>%
+  summarise(average_human_age = round(mean(human_age_dog),0))
+```
+  
+  5. Create a plot of results of question 4
+
+```{r}
+dog_survey %>%
+  filter(dog_gender != "No entry") %>%
+  mutate(human_age_dog = dog_age/6) %>%
+  group_by(dog_gender) %>%
+  summarise(average_human_age = round(mean(human_age_dog),0)) %>%
+  ggplot(mapping = aes(x = dog_gender, y = average_human_age)) +
+  geom_histogram(stat = "identity")
+```
+
+  

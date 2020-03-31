@@ -1,5 +1,5 @@
 #library----
-library(readxl)
+library(readr)
 library(janitor)
 library(tidyverse)
 library(openxlsx)
@@ -31,7 +31,7 @@ birds_data <- birds_data %>% rename(
   species_scientific_name = species_scientific_name_taxon_age_sex_plumage_phase,
   accompanying_numbers = nacc,
   accompanying_ocurrence = ocacc
-  )
+)
 
 ships_data <- clean_names(ships_data)
 
@@ -49,8 +49,7 @@ birds_data <- birds_data %>%
   select(-c(age:sex), -c(nfeed:ocflyp), -c(nfoll:ocnatfed))
 
 ships_data <- ships_data %>%
-  select(-ew, -sdir) %>%
-  select(-c(csmeth:longecell), -c(wdir:aprs), -c(stmp:depth))
+  select(-c(ew:longecell))
 
 
 # Missing values -----
@@ -76,4 +75,5 @@ ship_birds_data <- ship_birds_data %>%
   rename( record_birds = record.x,
           record_ship = record.y)
 
+#Export clean_data----
 write_csv(ship_birds_data, here("clean_data/ship_birds.csv"))

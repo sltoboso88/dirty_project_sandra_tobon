@@ -56,19 +56,13 @@ In this Data Base we have other 2 tests:
 * Analice some outliers and decide what to do with them:  
   * Negative values in time
   * Age over 100 years old  
-  
+  * Family Size over 13 
 ## Answer the Questions  
 
   1. Average RWA score for each gender  
   Note: When the information in gender is 0 is because the user didn't entry information, so we should filter it. 
 ```{r}
 right_wing %>%
-  mutate_at("gender", as.character) %>%
-  mutate(gender = recode(gender,
-                            '0' = "no entry",
-                            '1' = "male",
-                            '2' = "female",
-                            '3' = "other")) %>%
   group_by(gender) %>%
   summarise(average_score_per_gender = round(mean(score),2)) %>%
   filter(gender != "no entry")
@@ -78,28 +72,15 @@ right_wing %>%
 Note: When the information in hand is 0 is because the user didn't entry it and whe is 3 is because the person can write with both hands, so we should filter them.  
 ```{r}
 right_wing %>%
-  mutate_at("hand", as.character) %>%
-  mutate(hand = recode(hand,
-                       '0' = "no entry",
-                       '1' = "right",
-                       '2' = "left",
-                       '3' = "both")) %>%
   group_by(hand) %>%
   summarise(average_score_per_hand = round(mean(score),2)) %>%
   filter(!c(hand == "no entry" | hand == "both"))
 ```
 
 3. Average family size for each type of childhood  
-Note: the only columns that have relation with the childhood live is urban. We have filter the users that didn't answer the question and we have only keeped family size under or equal to 13 members. But even with the few outliers the result is the same, because we have a lot data so the outliers don't affect the result. 
+Note: the only columns that have relation with the childhood live is urban. 
 ```{r}
 right_wing %>%
-  filter(familysize <= 13)  %>%
-  mutate_at("urban", as.character) %>%
-  mutate(urban = recode(urban,
-                        '0' = "no entry",
-                        '1' = "rural",
-                        '2' = "suburban",
-                        '3' = "urban")) %>%
   group_by(urban) %>%
   summarise(average_familysize_chilhood = round(mean(familysize),0)) %>%
   filter(urban != "no entry")
@@ -109,25 +90,11 @@ right_wing %>%
  Note: We have taken the two columns that have the total time. One is time_a_rwas that have the total time that the people took for answering RWAS questions. The other one is the total_time_s that have the total time that the people spend answering  the introduction, RWAS questions and the other questions.  
 ```{r}
 right_wing %>%
-  mutate_at("education", as.character) %>%
-  mutate(education = recode(education,
-                            '0' = "no entry",
-                            '1' = "less than high school", 
-                            '2' = "high school", 
-                            '3' = "university degree", 
-                            '4' = "graduate degree")) %>%
   group_by(education) %>%
   summarise(average_time_rwas = round(mean(time_a_rwas),0)) %>%
   filter(education != "no entry")
 
-right_wing %>%
-  mutate_at("education", as.character) %>%
-  mutate(education = recode(education,
-                            '0' = "no entry",
-                            '1' = "less than high school", 
-                            '2' = "high school", 
-                            '3' = "university degree", 
-                            '4' = "graduate degree")) %>%
+right_wing  %>%
   group_by(education) %>%
   summarise(average_time_total_s = round(mean(total_time_s),0)) %>%
   filter(education != "no entry")
@@ -136,25 +103,11 @@ right_wing %>%
   5. Plot average time to take the test for each education level
 ```{r include=FALSE}
 average_time_rwas_education_level <- right_wing %>%
-  mutate_at("education", as.character) %>%
-  mutate(education = recode(education,
-                            '0' = "no entry",
-                            '1' = "less than high school", 
-                            '2' = "high school", 
-                            '3' = "university degree", 
-                            '4' = "graduate degree")) %>%
   group_by(education) %>%
   summarise(average_time_rwas = round(mean(time_a_rwas),0)) %>%
   filter(education != "no entry")
 
 average_time_a_education_level <- right_wing %>%
-  mutate_at("education", as.character) %>%
-  mutate(education = recode(education,
-                            '0' = "no entry",
-                            '1' = "less than high school", 
-                            '2' = "high school", 
-                            '3' = "university degree", 
-                            '4' = "graduate degree")) %>%
   group_by(education) %>%
   summarise(average_time_total_s = round(mean(total_time_s),0)) %>%
   filter(education != "no entry")

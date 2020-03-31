@@ -29,9 +29,9 @@ library(styler)
 </center>
 ## What is the dataset about?
 
-Every year around the world but mainly in USA and Canada, is a poll that ask people about how if they **Join**, **Despair** or **Meh**, some general candies; the grade of conecction that they have with specifics famous person; some question about cultural and publicity things, and some personal questions.  
+Every year around the world but mainly in USA and Canada, is a poll that ask people if they **Join**, **Despair** or **Meh**, some general candies; the grade of conecction that they have with specifics famous person; some question about cultural and publicity things, and some personal questions.  
 
-For this exercise is only neccesary the information about the candies. 
+For this exercise are only neccesary the information about the candies. 
 
 ## Data clean proccess  
 

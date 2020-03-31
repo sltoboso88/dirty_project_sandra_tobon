@@ -2879,12 +2879,6 @@ div.tocify {
 Note: When the information in gender is 0 is because the user didn’t entry information, so we should filter it.</li>
 </ol>
 <pre class="r"><code>right_wing %&gt;%
-  mutate_at(&quot;gender&quot;, as.character) %&gt;%
-  mutate(gender = recode(gender,
-                            '0' = &quot;no entry&quot;,
-                            '1' = &quot;male&quot;,
-                            '2' = &quot;female&quot;,
-                            '3' = &quot;other&quot;)) %&gt;%
   group_by(gender) %&gt;%
   summarise(average_score_per_gender = round(mean(score),2)) %&gt;%
   filter(gender != &quot;no entry&quot;)</code></pre>
@@ -2898,12 +2892,6 @@ Note: When the information in gender is 0 is because the user didn’t entry inf
 Note: When the information in hand is 0 is because the user didn’t entry it and whe is 3 is because the person can write with both hands, so we should filter them.</li>
 </ol>
 <pre class="r"><code>right_wing %&gt;%
-  mutate_at(&quot;hand&quot;, as.character) %&gt;%
-  mutate(hand = recode(hand,
-                       '0' = &quot;no entry&quot;,
-                       '1' = &quot;right&quot;,
-                       '2' = &quot;left&quot;,
-                       '3' = &quot;both&quot;)) %&gt;%
   group_by(hand) %&gt;%
   summarise(average_score_per_hand = round(mean(score),2)) %&gt;%
   filter(!c(hand == &quot;no entry&quot; | hand == &quot;both&quot;))</code></pre>
@@ -2917,13 +2905,6 @@ Note: When the information in hand is 0 is because the user didn’t entry it an
 Note: the only columns that have relation with the childhood live is urban. We have filter the users that didn’t answer the question and we have only keeped family size under or equal to 13 members. But even with the few outliers the result is the same, because we have a lot data so the outliers don’t affect the result.</li>
 </ol>
 <pre class="r"><code>right_wing %&gt;%
-  filter(familysize &lt;= 13)  %&gt;%
-  mutate_at(&quot;urban&quot;, as.character) %&gt;%
-  mutate(urban = recode(urban,
-                        '0' = &quot;no entry&quot;,
-                        '1' = &quot;rural&quot;,
-                        '2' = &quot;suburban&quot;,
-                        '3' = &quot;urban&quot;)) %&gt;%
   group_by(urban) %&gt;%
   summarise(average_familysize_chilhood = round(mean(familysize),0)) %&gt;%
   filter(urban != &quot;no entry&quot;)</code></pre>
@@ -2937,13 +2918,6 @@ Note: the only columns that have relation with the childhood live is urban. We h
 Note: We have taken the two columns that have the total time. One is time_a_rwas that have the total time that the people took for answering RWAS questions. The other one is the total_time_s that have the total time that the people spend answering the introduction, RWAS questions and the other questions.</li>
 </ol>
 <pre class="r"><code>right_wing %&gt;%
-  mutate_at(&quot;education&quot;, as.character) %&gt;%
-  mutate(education = recode(education,
-                            '0' = &quot;no entry&quot;,
-                            '1' = &quot;less than high school&quot;, 
-                            '2' = &quot;high school&quot;, 
-                            '3' = &quot;university degree&quot;, 
-                            '4' = &quot;graduate degree&quot;)) %&gt;%
   group_by(education) %&gt;%
   summarise(average_time_rwas = round(mean(time_a_rwas),0)) %&gt;%
   filter(education != &quot;no entry&quot;)</code></pre>
@@ -2952,14 +2926,7 @@ Note: We have taken the two columns that have the total time. One is time_a_rwas
 {"columns":[{"label":["education"],"name":[1],"type":["chr"],"align":["left"]},{"label":["average_time_rwas"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"graduate degree","2":"253"},{"1":"high school","2":"301"},{"1":"less than high school","2":"312"},{"1":"university degree","2":"323"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code>right_wing %&gt;%
-  mutate_at(&quot;education&quot;, as.character) %&gt;%
-  mutate(education = recode(education,
-                            '0' = &quot;no entry&quot;,
-                            '1' = &quot;less than high school&quot;, 
-                            '2' = &quot;high school&quot;, 
-                            '3' = &quot;university degree&quot;, 
-                            '4' = &quot;graduate degree&quot;)) %&gt;%
+<pre class="r"><code>right_wing  %&gt;%
   group_by(education) %&gt;%
   summarise(average_time_total_s = round(mean(total_time_s),0)) %&gt;%
   filter(education != &quot;no entry&quot;)</code></pre>

@@ -34,10 +34,12 @@ right_wing_au <- right_wing_au %>%
          -major)
 
 right_wing_au <- right_wing_au %>%
-  filter(age < 100)
-
+  filter(c(age < 100 | familysize <= 13) )
+  
+  
 right_wing_au <- right_wing_au %>%
-  rename("nat_engl_spe" = engnat)
+  rename("nat_engl_speak" = engnat)
+
 
 right_wing_au <- right_wing_au %>%
   pivot_longer(
@@ -51,6 +53,33 @@ right_wing_au <- right_wing_au %>%
           ifelse(number_question %in% 
                 c("q4", "q6", "q8", "q9", "q11", "q13", "q15", "q18", "q20", "q21" ), 
                 abs(score - 9), score))
+
+right_wing_au <- right_wing_au %>%
+  mutate_at("gender", as.character) %>%
+  mutate(gender = recode(gender,
+                         '0' = "no entry",
+                         '1' = "male",
+                         '2' = "female",
+                         '3' = "other")) %>%
+  mutate_at("hand", as.character) %>%
+  mutate(hand = recode(hand,
+                       '0' = "no entry",
+                       '1' = "right",
+                       '2' = "left",
+                       '3' = "both")) %>%
+  mutate_at("urban", as.character) %>%
+  mutate(urban = recode(urban,
+                        '0' = "no entry",
+                        '1' = "rural",
+                        '2' = "suburban",
+                        '3' = "urban")) %>%
+  mutate_at("education", as.character) %>%
+  mutate(education = recode(education,
+                            '0' = "no entry",
+                            '1' = "less than high school", 
+                            '2' = "high school", 
+                            '3' = "university degree", 
+                            '4' = "graduate degree"))
 
 # Export the data clean ----
 write_csv(right_wing_au, here("clean_data/right_wing_clean.csv"))

@@ -1,0 +1,16 @@
+Dog Owners Survey.
+
+It have a dimensions of 308 rows and 11 columns
+Only the name on the column Title was wrong so we have changed it
+It have 3 items that are duplicated one or more time, two one time and one five
+times. We have deleted the duplicates.
+We have standardize the gender (F, M, unknown, no entry )and size columns
+(XS, S, M, L, XL, no entry)
+The column age we have transform the values that were writing with words and
+convert the column to number,
+In the column amount_spent_on_dog_food we also clean some data that weren't
+numerical and applied abs so the 2 negative values became positive. Because
+doesn't make sense that you spend in food a negative value.
+We don't have to much data here so every data is important, so we will not
+delete the NA values, we will convert them to No entry value and filter it in
+the analysis, so we don't loss too much data.

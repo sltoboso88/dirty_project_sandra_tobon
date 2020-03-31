@@ -25,10 +25,6 @@ dim(halloween_candy_2017)
 names(halloween_candy_2017)
 
 
-
-
-
-
 #Rename delete and pivot some columns 2015----
 
 halloween_candy_2015 <- halloween_candy_2015 %>%
@@ -74,8 +70,6 @@ halloween_candy_2015 <-
   add_column(halloween_candy_2015, year, gender, country)
 
 halloween_candy_2015 <- halloween_candy_2015[,c(5, 1, 6, 2, 7, 3, 4)]
-
-write_csv(halloween_candy_2015, here("clean_data/halloween_candy_2015.csv"))
 
 
 
@@ -174,9 +168,6 @@ halloween_candy_2016 <- halloween_candy_2016 %>%
   add_column(year)
 
 halloween_candy_2016 <- halloween_candy_2016[,c(7, 1, 2, 3, 4, 5, 6)]
-
-write_csv(halloween_candy_2016, here("clean_data/halloween_candy_2016.csv"))
-
 
 
 
@@ -287,11 +278,6 @@ halloween_candy_2017 <- halloween_candy_2017[,c(7, 1, 2, 3, 4, 5, 6)]
 
 halloween_candy_2017 <- halloween_candy_2017 %>%
   drop_na()
-
-write_csv(halloween_candy_2017, here("clean_data/halloween_candy_2017.csv"))
-
-
-
 
 
 #Tibble 2015_2016_2017----
