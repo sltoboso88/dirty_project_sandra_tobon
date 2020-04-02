@@ -1,0 +1,101 @@
+---
+title: "Documentation Dechatlon"
+author: "Sandra Tobon"
+date: "02/04/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(tidyverse)
+library(readr)
+library(here)
+```
+
+```{r include=FALSE}
+decathlon_clean <- read_csv(here("clean_data/decathlon_cleaning.csv"))
+```
+
+<center>
+# Dechatlon Data  
+![](https://thumbs.dreamstime.com/b/diseño-con-todos-los-eventos-del-atletismo-ejemplo-del-decatlón-del-vector-74940981.jpg)
+</center>
+
+
+## Dechatlon Data  
+
+It is a data base with the times and points of different competitors in two decathlon competitions.   
+
+## Cleaning process  
+
+  * Clean the columns names and change some names in the columns so they will be more meaningful 
+  * Convert the row names to a column and standardize the data  
+  * Change the column competition to as.character so will be easier to work with it  
+  * Select the columns that we will use for answering the questions  
+  
+## Answer the Question  
+
+  1. Who had the longest long jump seen in the data?   
+```{r}
+decathlon_clean %>%
+  select(broker_name, long_jump) %>%
+  filter(long_jump == max(long_jump))
+```
+  
+  2. What was the average 100m time in each competition?  
+```{r}
+decathlon_clean %>%
+  group_by(competition) %>%
+  summarise(average_100m_race_per_competition = round(mean(race_100m),2))
+```
+  
+  3. Who had the highest total points across both competitions?  
+```{r}
+decathlon_clean %>%
+  group_by(broker_name) %>%
+  summarise(highest_total_points_both_competitions = sum(points)) %>%
+  arrange(desc(highest_total_points_both_competitions)) %>%
+  top_n(1)
+```
+  
+  4. What was the shot-put scores for the top three competitors in each competition?  
+```{r}
+decathlon_clean %>%
+  select(competition, rank, shot_put) %>%
+  filter(rank < 4)
+```
+
+  Total points in shot-put for the top three competitors in each competition  
+```{r}
+decathlon_clean %>%
+  select(competition, rank, shot_put) %>%
+  filter(rank < 4) %>%
+  group_by(competition) %>%
+  summarise(total_points_shot_put = sum(shot_put))
+```
+
+  5. What was the average points for competitors who ran the 400m in less than 50 seconds vs. those than ran 400m in more than 50 seconds?  
+```{r}
+seconds_400_50 <- c(50.1)
+
+decathlon_clean %>%
+  arrange(race_400m) %>%
+  mutate(group_400m = findInterval(race_400m, seconds_400_50)) %>%
+  mutate_at("group_400m", as.character) %>%
+  mutate(group_400m = recode(group_400m,
+                             '0' = "less_50_400m",
+                             '1' = "more_50_400m")) %>%
+  group_by(group_400m) %>%
+  summarise(average_points_400m = round(mean(race_400m),2))
+```
+
