@@ -1,0 +1,80 @@
+DISASTERS DATA CLEANING PROCESS
+
+The dimensions of the raw data set are 12397 rows and 12 columns.
+
+The columns names are accord with snakes parameters.
+
+They are 2 rows that are duplicated but the only way to identify them is
+without use the column id because it is unique in each rows. We have deleted
+those data.
+
+The column year looks fine
+
+Valid values in the column disasters type:
+Drought
+Epidemic
+Flood
+Storm
+Volcanic activity
+Earthquake
+Industrial accident
+Miscelleanous accident
+Mass Movement (dry)
+Transport accident
+Landslide
+Wildfire
+Insect infestation
+Extreme Temperature
+Impact
+Animal Accident
+Complex Disasters
+
+The column iso, CHINA is the only data different that 3 characters
+
+names_country column here some names are in Latin1 so we have to chances the
+encode configuration to Latin1 and solve come problems with the name of that
+countries
+Canary Islands = Canary Is
+Ivory Coast = C�te d�Ivoire
+Réunion  = R?Réunion
+United Kingdom of Great Britain and Northern Ireland =
+United Kingdom of Great Britain and Northern Irela
+
+The column occurrence have outliers after the value 9 occurrence,  but actually
+they are real values, most of them relative to (184):
+  Transport accident
+  Miscelleanous accident
+  Storm
+  Flood
+  Industrial accident
+  Epidemic
+  (Earthquake)
+If we take the occurrence outliers and analyze the outliers inside outliers we
+have only 2 values 52 and 54 relative with Industrial accident in China in 2004
+and 2005
+I keep the outliers in occurrence because they show the reality
+The NA values we transform in 0 so we can work easier with that
+total_deaths have 21 outliers, but they looks like real value, so we will keep
+them
+
+The column total_affected is an summation of the columns:
+  total_deaths
+  affected
+  injured
+  homeless
+So the missing values could be filling with a summation of the column above
+We have change the NA values for 0 so in that way we can fill the missing values
+in total_affected we will filter them in the moment that we will need them
+For answering the questions we don't need the columns affected, injured and
+homeless so we take them out, but we have used them for filling the missing
+values in total_affected.
+
+The values in total_damage are in dollars but we don't need the column
+total_damage for answering the questions.
+
+total_affected have 63 outliers but they are real data so we will continue
+working with them.
+
+We transform the columns occurrence, total_deaths and total_affected to
+integer because they are relative with number of people. Also we have filter
+the negative total_deaths value because is clear that it was a mistake.

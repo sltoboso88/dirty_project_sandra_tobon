@@ -1,0 +1,141 @@
+---
+title: "Documentation Disaster Data"
+author: "Sandra Tobon"
+date: "01/04/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
+---
+```{r include=FALSE}
+library(tidyverse)
+library(here)
+library(readr)
+locale(encoding = "Latin1")
+```
+
+```{r include=FALSE}
+disasters_clean <- read_csv(here("clean_data/disasters_data_clean.csv"))
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<center>
+# Disaster Data  
+
+![](https://www.ecmag.com/sites/default/files/styles/article_medium/public/xml_uploads/unzipped/natural_disasters_flod_fire_tornado_shutterstock_114163198_0.jpg?itok=_u9V9trf)
+
+</center>
+
+## About the data  
+
+The data base is a recollection of different style of disasters reported by year and by country, between 1900 to 2015.   
+
+Some of the countries that we find here don't exist anymore, because they were divided or unified.
+
+In the data base we find information about:  
+  
+  * year = 1900 - 2015  
+  * disaster_type = 17 different disasters type  
+  * iso = international id of countries base in three letters   
+  * country_name   
+  * occurrence = number of times that disaster_type occurred in the year  
+  * total_deaths   
+  * affected  = people requiring immediate assistance during an emergency situation  
+  * injured  = here aren't people that were affected   
+  * homeless = people that loss their houses  
+  * total_affected  
+  * total_damage = the economic loss in USD  
+  
+##  Cleaning process  
+
+  * Some rows were duplicate but with different id, so we deleted them  
+  * We standardize the column disaster_type that has some misspelling rows  
+  * It was a country that had more than 3 characters in iso column, we have converted it to the iso standars  
+  * Some countries_names had special characters so instead to change their name we have used encode Latin 1. Also we have corrrected the misspelling in some countries_name
+  * total_death had a negative value that we have taken out
+  * The columns ocurrence, total_death, affected, injured, homeless and total_affected were transform to integer  
+  * ocurrence, total_deaths and total_affected had outliers but actually they are real data so we haven't delete them
+  * The NA values were repleacing by 0 because we didn't want to lose this data, we will filter them in each specific case  
+  * The columns total_affected had a lot missing values, but when we analyze the data we discovered that total_affected was a summation between total_death, affected, injured and homeless columns, so in this way we could fill the missing values in the column total_affected  
+  * For answering the questions we don't need the columns affected, injured, homeless and total_damage, so we have taken them out  
+
+## Answer The Questions  
+
+  1. What was the greatest disaster of all time by total deaths?  
+
+  Disaster with the majority of deaths  
+  Notes: Soviet famine of 1932–33 was a major famine that killed millions of people in the major grain-producing areas in Soviet Union (Ukraine)
+```{r}
+disasters_clean %>%
+  filter(total_deaths == max(total_deaths))
+```
+
+  Disaster Type with more deaths  
+```{r}
+disasters_clean %>%
+   group_by(disaster_type) %>%
+   summarise(total_deaths_per_disaster_type = sum(total_deaths)) %>%
+   arrange(desc(total_deaths_per_disaster_type)) %>%
+   top_n(1)
+```
+
+
+  2. Which country has had the highest total people affected by disasters? 
+  Note: China is the country with more population, also the labor conditions aren't very safe, so they have a lot Industrial accident with people affected by them.   
+```{r}
+disasters_clean %>%
+  group_by(country_name) %>%
+  summarise(total_people_affected_by_disasters = sum(total_deaths)) %>%
+  arrange(desc(total_people_affected_by_disasters)) %>%
+  top_n(1)
+```
+  
+  3. What are the top 5 countries for total number of disasters?
+  
+```{r}
+disasters_clean %>%
+  group_by(country_name) %>%
+  summarise(total_number_of_disasters = sum(occurrence)) %>%
+  arrange(desc(total_number_of_disasters)) %>%
+  top_n(5)
+```
+
+  4. What is the greatest disaster in the last 5 years of the data, by total deaths?
+  
+  Disaster with the majority of deaths in the last 5 years of the data base
+```{r}
+disasters_clean %>%
+  filter(year > 2010 ) %>%
+  filter(total_deaths == max(total_deaths))
+```
+  
+
+   Disaster Type with more deaths in the last 5 years of the data base
+```{r}
+disasters_clean %>%
+   filter(year > 2010) %>%
+   group_by(disaster_type) %>%
+   summarise(total_deaths_per_disaster_type = sum(total_deaths)) %>%
+   arrange(desc(total_deaths_per_disaster_type)) %>%
+   top_n(1)
+```
+
+
+  5. What were the top 10 years that had the most people dying from earthquakes? 
+```{r}
+disasters_clean %>%
+  filter(disaster_type == "Earthquake") %>%
+  group_by(year) %>%
+  summarise(total_deaths_by_earthquake = sum(total_deaths)) %>%
+  arrange(desc(total_deaths_by_earthquake)) %>%
+  top_n(10)
+```
+
+   
+   
