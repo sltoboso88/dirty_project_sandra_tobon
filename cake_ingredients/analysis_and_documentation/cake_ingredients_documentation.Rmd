@@ -1,0 +1,90 @@
+---
+title: "Cake Ingredients Documents"
+author: "Sandra Tobon"
+date: "02/04/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+    css: styles.css
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(tidyverse)
+library(here)
+library(readr)
+```
+
+```{r include=FALSE}
+cake_clean_ingredients <- read_csv(here("clean_data/cake_ingredients_clean.csv"))
+```
+
+<center>
+# Cake Ingredients   
+![](https://hips.hearstapps.com/digitalspyuk.cdnds.net/13/33/uktv-the-great-british-bake-off-2013-1.jpg?resize=768:*)
+</center>
+
+## Data Base   
+
+It is a data base with two tables one for the cake ingredients and other with the names of the ingredients and the standar measure of the ingredients. The way to join both tables is through the code for the ingredients, it is a two characters key that is in both tables.   
+
+## Clean Process  
+
+  * In the table cake_ingredients pivot longer the columns with the code of ingredients as name and put this data in a column call code, the contain of this columns went to a column call ingredient_quantity  
+  * We drop the NA values in the column ingredient_quantity because with don't need them and we didn't loss any information without them  
+  * In the table cake_code we fill one NA value that was in the column measure but the amount was in the name of the ingredient  
+  * We inner join both tables through the column code 
+  
+## Answer the questions  
+
+  1. Which cake has the most cocoa in it?
+```{r}
+cake_clean_ingredients %>%
+  group_by(cake) %>% 
+  filter(ingredient == "Cocoa" & ingredients_quantity == max(ingredients_quantity))
+```
+ 
+  2. For sponge cake, how many cups of ingredients are used in total?
+```{r}
+cake_clean_ingredients %>%
+  filter(cake == "Sponge") %>%
+  group_by(measure) %>%
+  summarise(total_for_cups_sponge = sum(ingredients_quantity)) %>%
+  filter(measure == "cup")
+  
+```
+  
+  3. How many ingredients are measured in teaspoons?
+```{r}
+cake_clean_ingredients %>%
+  group_by(measure) %>%
+  summarise(total_ingredients_teaspoons = n_distinct(ingredient)) %>%
+  filter(measure == "teaspoon")
+```
+
+  4. Which cake has the most unique ingredients?
+```{r}
+cake_clean_ingredients %>%
+  group_by(ingredient) %>%
+  mutate(use_ingredient = n()) %>%
+  filter(use_ingredient == 1) %>%
+  group_by(cake) %>%
+  summarise(total_unique_ingredient = n()) %>%
+  top_n(1)
+```
+  
+  5. Which ingredients are used only once?  
+```{r}
+cake_clean_ingredients %>%
+  group_by(ingredient) %>%
+  summarise(only_use_one = n()) %>%
+  filter(only_use_one == 1)
+```
+

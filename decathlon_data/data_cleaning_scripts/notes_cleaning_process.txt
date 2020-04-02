@@ -1,0 +1,19 @@
+Dechatlon Data
+It has 41 rows and 13 columns
+The columns names aren't in snake style and some names aren't really
+informative so we have clean and rename the columns names
+The rows have names that we will need for the analyze so they should be a new
+column call broker_name
+The names in broker_name are writing in different styles so we transform them
+with a title style
+We chance the competition column from factor to character so it will be easier
+work with it
+For answering the questions I will need the following columns:
+* broker_name
+* race_100m
+* long_jump
+* shot_put
+* race_400m
+* rank
+* points
+* competition
