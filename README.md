@@ -16,4 +16,4 @@ find the scripts in R that I produced for cleaning the data. The cleaned data it
 The insights about the data are in a html file called ¨documentation_xxx¨(where xxx is the name of each project), saved in 
 the folder "analysis_and_documentation". 
 
-Soon I will also analyse the same projects using Phyton to produce additional plots, insights and explanations.
+Soon I will also analyse the same projects using Python to produce additional plots, insights and explanations.
